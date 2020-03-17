@@ -1,24 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9990580d-213a-46a2-aacd-af52bcc26f4a" name="Default" comment="init">
-      <change afterPath="$PROJECT_DIR$/.idea/TWERP.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/API/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/API/conftest.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/API/pytest.ini" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/API/test_05.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/API/test_06.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/API/test_b.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/API/test_expectation.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/API/test_fix.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/API/test_kpi.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/API/test_param.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/API/test_sample.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ERP/__init__.py" afterDir="false" />
-    </list>
+    <list default="true" id="9990580d-213a-46a2-aacd-af52bcc26f4a" name="Default" comment="init" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -55,8 +38,8 @@
       <file leaf-file-name="analysis_excel.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tools/analysis_excel.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="325">
-              <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+            <state relative-caret-position="250">
+              <caret line="10" column="42" lean-forward="true" selection-start-line="10" selection-start-column="42" selection-end-line="10" selection-end-column="42" />
               <folding>
                 <element signature="e#106#117#0" expanded="true" />
               </folding>
@@ -826,8 +809,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tools/analysis_excel.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="325">
-          <caret line="13" lean-forward="true" selection-start-line="13" selection-end-line="13" />
+        <state relative-caret-position="250">
+          <caret line="10" column="42" lean-forward="true" selection-start-line="10" selection-start-column="42" selection-end-line="10" selection-end-column="42" />
           <folding>
             <element signature="e#106#117#0" expanded="true" />
           </folding>

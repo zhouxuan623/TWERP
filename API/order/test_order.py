@@ -23,7 +23,6 @@ class Test_order():
         home_page=requests.post(url,headers=_headers,data=json.dumps(data))
         result = home_page.json()
         assert result['code']==0
-        pass
 
     def test_order_cancel(self,_headers):
         "待核查的订单可取消"
@@ -45,17 +44,49 @@ class Test_order():
             }
         home_page = requests.post(url,headers=_headers,data=json.dumps(data))
         result = home_page.json()
-        pass
+
+    def test_order_checked_list(self,_headers):
+        '新订单列表 /order/checked/list'
+        url = SYS_URL+'/order/checked/list'
+        data = {
+                "pageNum": 1,
+                "pageSize": 10,
+                "searchName": "",
+                "accountId": "",
+                "deliveryMethodId": "",
+                "paymentMethodId": "",
+                "salesTimeEnd": "",
+                "salesTimeStart": "",
+                "isInBlackList": None
+            }
+        home_page = requests.post(url,headers=_headers,data=json.dumps(data))
+        response = home_page.json()
+        assert response['code']==0
+    def test_checking_list(self,_headers):
+        '核对中订单列表 /order/checking/list '
+        url=SYS_URL+'/order/checking/list'
+        data = {
+                "pageNum": 1,
+                "pageSize": 10,
+                "searchName": "",
+                "accountId": "",
+                "deliveryMethodId": "",
+                "paymentMethodId": "",
+                "salesTimeEnd": "",
+                "salesTimeStart": "",
+                "isInBlackList": None
+            }
+        home_page = requests.post(url,headers=_headers,data=json.dumps(data))
+        response = home_page.json()
+        assert  response['code']==0,response['code']
 
     def test_order_getOnShipment(self,_headers):
+        "出货中列表查询"
         url = SYS_URL + '/order/getOnShipment'
         home_page = requests.get(url, headers=_headers)
         response = home_page.json()
         assert response['code'] == 0
 
-
-
-        url=SYS_URL+''
 
 
 

@@ -9,6 +9,8 @@ from faker import Factory
 import string
 import random
 import  pymysql
+import requests
+import json
 
 
 SYS_URL="http://10.0.8.67:7777"
@@ -45,6 +47,7 @@ class mysql():
             result = self._cursor.fetchall()
         except pymysql.Error as e:
             print (e)
+            print (sql)
             result = False
         return result
     def insert(self,sql):
@@ -86,6 +89,15 @@ values (
     print (ticket)
     d.close()
 
+
+def check_result(url,headers,data=None):
+    "简单结果校验"
+    if data is None:
+        home_page=requests.get(url=url,headers=headers)
+    else:
+        home_page = requests.post(url=url,headers=headers, data=json.dumps(data))
+    response = home_page.json()
+    assert response['code'] == 0, response['code']
 
 
 

@@ -87,10 +87,7 @@ class Test_order():
         '同步托运方状态'
         url=SYS_URL+'/order/createLogisticOrders'
         "订单状态为出货中"
-        c_mysql=mysql(B_HOST,B_USER,B_PASSWORD,B_DATABASE)
-        sql=f"SELECT a.sale_order_id from {B_DATABASE}.tb1_sale_orders a where a.order_status=4 and merchant_id='{MERCHANT}' ORDER BY a.sales_time desc limit 1;"
-        sale_order_id=(c_mysql.query(sql))[0][0]
-        data={"saleOrderIds":[sale_order_id]}
+        data={"saleOrderIds":[sale_id(4)]}
         check_result(url, _headers, data)
 
     def test_delivered_list(self,_headers):
@@ -127,7 +124,7 @@ class Test_order():
         check_result(url, _headers)
 
     # @pytest.mark.parametrize('url',[SYS_URL + '/order/getOnShipment',SYS_URL + '/order/getOnShipment'])
-    def test_order_getOnShipment(self,_headers,url):
+    def test_order_getOnShipment(self,_headers):
         "出货中订单的配送方式数量查询/order/getOnShipment"
         url = SYS_URL + '/order/getOnShipment'
         check_result(url,_headers)
@@ -182,6 +179,20 @@ class Test_order():
         }
         check_result(url,_headers, data)
 
+    def test_printPickingList(self,_headers):
+        '打印拣货单'
+        url = SYS_URL+'/order/printPickingList'
+        data = {"saleOrderIds":[sale_id(4)]}
+        check_result(url,_headers, data)
+
+    def test_recheck(self,_headers):
+        '重新核查订单/order/recheck'
+        url = SYS_URL + '/order/recheck'
+        data = {"saleOrderIds": [sale_id(0)]}
+        check_result(url, _headers, data)
+
+
+
 
 
 
@@ -208,4 +219,4 @@ def other_sale_id(sql_condition):
 
 
 if __name__ == '__main__':
-    pytest.main(['-v','test_order.py::Test_order::test_printLabelList'])
+    pytest.main(['-v','test_order.py'])

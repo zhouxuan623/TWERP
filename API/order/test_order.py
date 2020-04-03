@@ -123,7 +123,6 @@ class Test_order():
         url=SYS_URL+'/order/getMenuCount'
         check_result(url, _headers)
 
-    # @pytest.mark.parametrize('url',[SYS_URL + '/order/getOnShipment',SYS_URL + '/order/getOnShipment'])
     def test_order_getOnShipment(self,_headers):
         "出货中订单的配送方式数量查询/order/getOnShipment"
         url = SYS_URL + '/order/getOnShipment'
@@ -191,6 +190,22 @@ class Test_order():
         data = {"saleOrderIds": [sale_id(0)]}
         check_result(url, _headers, data)
 
+    def test_stockout_list(self,_headers):
+        '缺货订单列表 /order/stockout/list'
+        url = SYS_URL+'/order/stockout/list'
+        data={
+            "pageNum": 1,
+            "pageSize": 10,
+            "searchName": "",
+            "accountId": "",
+            "deliveryMethodId": "",
+            "paymentMethodId": "",
+            "salesTimeEnd": "",
+            "salesTimeStart": "",
+            "isInBlackList": None
+        }
+        check_result(url,_headers,data)
+
 
 
 
@@ -219,4 +234,4 @@ def other_sale_id(sql_condition):
 
 
 if __name__ == '__main__':
-    pytest.main(['-v','test_order.py'])
+    pytest.main(['-v','test_order.py::Test_order::test_stockout_list'])

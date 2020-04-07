@@ -99,6 +99,19 @@ def check_result(url,headers,data=None):
     response = home_page.json()
     assert response['code'] == 0, response['code']
 
+def response_result(url,headers,method='post',data=None):
+    "简单结果校验"
+    if method=='get':
+        home_page=requests.get(url=url,headers=headers)
+    elif method=='put':
+        home_page = requests.put(url=url,headers=headers,data=json.dumps(data))
+    else:
+        home_page = requests.post(url=url,headers=headers, data=json.dumps(data))
+    response = home_page.json()
+    assert response['code'] == 0, response['code']
+
+
+
 
 
 

@@ -206,13 +206,65 @@ class Test_order():
         }
         check_result(url,_headers,data)
 
+    def test_order_sync(self,_headers):
+        '手工同步线上订单 /order/sync'
+        url = SYS_URL+'/order/sync'
+        home_page = requests.post(url=url, headers=_headers,)
+        response = home_page.json()
+        assert response['code'] == 0, response['code']
+
+    def test_update(self,_headers):
+        u'订单编辑(编辑商品信息) /order/update'
+        url = SYS_URL +'/order/update'
+        sql = f"""SELECT a.sale_order_id,b.goods_id FROM {B_DATABASE}.tb1_sale_orders a LEFT JOIN {B_DATABASE}.tb1_order_goods b on a.sale_order_id=b.sale_order_id
+where a.order_status in (1,2) and a.merchant_id='{MERCHANT}' ORDER BY a.sales_time desc limit 1;"""
+        c_mysql = mysql(B_HOST, B_USER, B_PASSWORD, B_DATABASE)
+        if len(c_mysql.query(sql)) == 0:
+            pytest.skip(msg='没有匹配的订单')  # 跳过此用例
+        sale_order_id,goods_id = (c_mysql.query(sql))[0]
+        data={
+                "orderGoodsList": [{
+                    "goodsId":goods_id,
+                    "goodsNum": random.randint(1,10)
+                }],
+                "saleOrderId": sale_order_id
+            }
+        response_result(url,_headers,'put',data)
+    def test_updateBeforeShipmentStatus(self,_headers):
+        '退回可出货post /order/updateBeforeShipmentStatus'
+        url=SYS_URL+'/order/updateBeforeShipmentStatus'
+        sale_order_id=sale_id(4)
+        data={"saleOrderIds":[sale_order_id]}
+        response_result(url,_headers,data=data)
+
+    def test_updateCheckedStatus(self,_headers):
+        '退回新订单POST /order/updateCheckedStatus'
+        url=SYS_URL+'/order/updateCheckedStatus'
+        sale_order_id=other_sale_id('order_status in (2,3)')
+        data={"saleOrderIds":[sale_order_id]}
+        response_result(url,_headers,data=data)
+
+    def test_updateCheckingStatus(self,_headers):
+        '退回核对中 POST /order/updateCheckingStatus'
+        url = SYS_URL + '/order/updateCheckedStatus'
+        sale_order_id = other_sale_id('order_status in (1)')
+        data = {"saleOrderIds": [sale_order_id]}
+        response_result(url, _headers, data=data)
+
+
+
+
+
+
+
+
 
 
 
 
 
 def sale_id(order_status):
-    sql = f"SELECT a.sale_order_id from {B_DATABASE}.tb1_sale_orders a where a.is_paid='{order_status}' and merchant_id='{MERCHANT}' ORDER BY a.sales_time desc limit 1;"
+    sql = f"SELECT a.sale_order_id from {B_DATABASE}.tb1_sale_orders a where a.order_status='{order_status}' and merchant_id='{MERCHANT}' ORDER BY a.sales_time desc limit 1;"
     c_mysql = mysql(B_HOST, B_USER, B_PASSWORD, B_DATABASE)
     if len(c_mysql.query(sql)) == 0:
         pytest.skip(msg='没有匹配的订单')  # 跳过此用例
@@ -233,5 +285,6 @@ def other_sale_id(sql_condition):
 
 
 
+
 if __name__ == '__main__':
-    pytest.main(['-v','test_order.py::Test_order::test_stockout_list'])
+    pytest.main(['-v','test_order.py::Test_order::test_updateCheckingStatus'])

@@ -118,6 +118,62 @@ class Test_product():
                 }
         response_result(url,_headers,data=data)
 
+    def test_product_update(self,_headers,_product_info):
+        '修改商品 PUT /product/update'
+        url = SYS_URL+'/product/update'
+        product_id, category_id, product_name, sku_code=_product_info
+        data = {
+                "productId": product_id,
+                "categoryId": category_id,
+                "skuCode": sku_code,
+                "productName": product_name,
+                "productEnName": fake.word(),
+                "hscode": "",
+                "brand": "",
+                "weight": 0,
+                "length": 0,
+                "width": 0,
+                "height": 0,
+                "imageThumbUrl": None,
+                "imgUrl": None,
+                "declareName": "",
+                "declarePrice": None,
+                "declareCurrency": "USD",
+                "isMulti": 0,
+                "merchantId": MERCHANT,
+                "mulitList": None,
+                "supplierList": [{
+                    "supplierId": "",
+                    "purchasingDays": None,
+                    "isPrimary": 0
+                }, {
+                    "supplierId": "",
+                    "purchasingDays": None,
+                    "isPrimary": 0
+                }, {
+                    "supplierId": "",
+                    "purchasingDays": None,
+                    "isPrimary": 0
+                }],
+                "deletedGoodsIds": []
+            }
+        response_result(url,_headers,'put',data)
+
+    def test_updateproductcategory(self,_headers,_product_id,_categroy_id):
+        '批量修改商品分类PUT /product/updateProductCategory '
+        url = SYS_URL+'/product/updateProductCategory'
+        data={
+              "categoryId":_categroy_id[0] ,
+              "productList": [
+                  _product_id
+              ]
+            }
+        response_result(url,_headers,'put',data)
+
+
+
+
+
 
 
 
@@ -128,5 +184,5 @@ class Test_product():
 
 
 if __name__ == '__main__':
-    pytest.main(['-v','test_product.py::Test_product::test_selectGoods'])
+    pytest.main(['-v','test_product.py::Test_product::test_updateproductcategory'])
 

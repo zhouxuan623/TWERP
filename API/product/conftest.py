@@ -48,4 +48,15 @@ def _product_id():
     product_id = (c_mysql.query(sql))[0][0]
     return product_id
 
+@pytest.fixture(scope='function')
+def _product_info():
+    sql=f"""SELECT a.product_id,a.category_id,a.product_name,b.sku_code
+            from {B_DATABASE}.tb1_product a LEFT JOIN {B_DATABASE}.tb1_sku b on a.sku_id=b.sku_id
+            where a.merchant_id='{MERCHANT}' ORDER BY a.created_time desc;"""
+    c_mysql = mysql(B_HOST, B_USER, B_PASSWORD, B_DATABASE)
+    if len(c_mysql.query(sql)) == 0:
+        pytest.skip(msg='没有可用的商品')  # 跳过此用例
+
+    return (c_mysql.query(sql))[0]
+
 

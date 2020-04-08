@@ -23,7 +23,7 @@ class Test_product():
                 "skuCode": fake.word(),
                 "productName": fake.company(),
                 "productEnName": fake.word(),
-                "categoryId": _categroy_id,
+                "categoryId": _categroy_id[0],
                 "declareName": fake.name(),
                 "declarePrice": str(fake.pydecimal(left_digits=2,right_digits=1,min_value=2,max_value=20)),
                 "weight": fake.random_digit(),
@@ -59,6 +59,74 @@ class Test_product():
               ]
             }
         response_result(url,_headers,data=data)
+    def test_category_add(self,_headers):
+        '新增商品分类POST /product/category/add'
+        url = SYS_URL+'/product/category/add'
+        data = {"categoryName":fake.word()}
+        response_result(url,_headers,data=data)
+
+    def test_category_delelte(self,_headers,_categroy_id_can_delete):
+        '删除商品分类DELETE  /product/category/delete/{productCategoryId}'
+        url = SYS_URL+f'/product/category/delete/{_categroy_id_can_delete}'
+        response_result(url,_headers,method='delete')
+
+    def test_category_list(self,_headers):
+        '商品分类列表POST /product/category/list'
+        url=SYS_URL+'/product/category/list'
+        response_result(url,_headers)
+
+    def test_category_update(self,_headers,_categroy_id):
+        '修改商品分类PUT /product/category/update'
+        url = SYS_URL+'/product/category/update'
+        category_id,category_name, parent_category_id=_categroy_id
+        data={
+                "categoryName": category_name+fake.word(),
+                "parentCategoryId": parent_category_id,
+                "categoryId":category_id ,
+                "displayOrder": -1
+            }
+        response_result(url,_headers,'put',data)
+
+    def test_fuzzylookupgoods(self,_headers):
+        '仅根据SKU选择货品 POST /product/fuzzyLookupGoods'
+        url = SYS_URL+'/product/fuzzyLookupGoods'
+        data = {
+                  "pageNum": 1,
+                  "pageSize": 10,
+                  "searchName": "z"
+                }
+        response_result(url,_headers,data=data)
+
+    def test_getProductDetail(self,_headers,_product_id):
+        'GET /product/getProductDetail/{productId}'
+        url = SYS_URL+f'/product/getProductDetail/{_product_id}'
+        response_result(url,_headers,'get')
+
+    def test_myProducts(self,_headers):
+        '查询商品 POST /product/myProducts'
+        url = SYS_URL+'/product/myProducts'
+        data = {"pageSize":10,"pageNo":1,"searchName":"","categoryIds":[]}
+        response_result(url,_headers,data=data)
+
+    def test_selectGoods(self,_headers):
+        '选择货品 POST /product/selectGoods'
+        url = SYS_URL+'/product/selectGoods'
+        data={
+                  "pageNum": 1,
+                  "pageSize": 10,
+                  "searchName": "z"
+                }
+        response_result(url,_headers,data=data)
+
+
+
+
+
+
+
+
+
 
 if __name__ == '__main__':
-    pytest.main(['-v','test_product.py::Test_product::test_batchelete'])
+    pytest.main(['-v','test_product.py::Test_product::test_selectGoods'])
+

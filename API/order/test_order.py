@@ -251,6 +251,59 @@ where a.order_status in (1,2) and a.merchant_id='{MERCHANT}' ORDER BY a.sales_ti
         data = {"saleOrderIds": [sale_order_id]}
         response_result(url, _headers, data=data)
 
+    def test_updateCheckingStatus(self,_headers):
+        '变更为出货中 POST /order/updateOnShipmentStatus'
+        url = SYS_URL + '/order/updateOnShipmentStatus'
+        sale_order_id = other_sale_id('order_status in (3)')
+        data = {"saleOrderIds": [sale_order_id]}
+        response_result(url, _headers, data=data)
+
+    def test_updateShippingInformation(self,_headers):
+        '修改实际配送地址 PUT /order/updateShippingInformation'
+        url = SYS_URL+'/order/updateShippingInformation'
+        sale_order_id = other_sale_id('order_status in (1,2,3,4)')
+        data = {
+                "saleOrderId": sale_order_id,
+                "city": None,
+                "phone": "0916914268",
+                "postcode": None,
+                "realDeliveryMethodName": "",
+                "sysDeliveryMethodCode": "ACS-HK|空運",
+                "recipientAddress1": "测试地址11",
+                "recipientAddress2": "中西區",
+                "recipientCountry": "HK",
+                "recipientName": "zhouxuan",
+                "recipientState": None,
+                "warehouseId": WAREHOUSE_ID
+            }
+        response_result(url, _headers,method='put', data=data)
+
+    def test_updateShippingStatus(self,_headers):
+        '变更为已出货POST /order/updateShippingStatus'
+        ##变更为已出货和同步托运状态无关，所有的出货中的都可以变为已出货
+        url = SYS_URL+'/order/updateShippingStatus'
+        sale_order_id = other_sale_id('order_status in (4)')
+        data = {"saleOrderIds": [sale_order_id]}
+        response_result(url, _headers, data=data)
+
+    def test_updateTrackingData(self,_headers):
+        '自定义物流填写跟踪单号 POST /order/updateTrackingData'
+        url = SYS_URL+'/order/updateTrackingData'
+        data = {
+            "saleOrderId": shippingyourself(),
+            "trackingNumber": ''
+        }
+        response_result(url,_headers,data=data)
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -279,6 +332,30 @@ def other_sale_id(sql_condition):
     sale_order_id = (c_mysql.query(sql))[0][0]
     return sale_order_id
 
+def shippingyourself():
+    '使用自定义物流的订单'
+    sql = f"""SELECT a.sale_order_id from {B_DATABASE}.tb1_sale_orders a where a.real_delivery_method_code not in (
+            "ACS-HK|空運",
+            "NV-SIN|空運",
+            "tw_711_pay",
+            "tw_711_nopay",
+            "tw_711_b2c_pay",
+            "tw_711_b2c_nopay",
+            "tw_fm_c2c_pay",
+            "tw_fm_c2c_nopay",
+            "tw_fm_b2c_pay",
+            "tw_fm_b2c_nopay",
+            "711_return_nopay",
+            "NV-MY|空運"
+            ) and merchant_id='{MERCHANT}' ORDER BY a.sales_time desc limit 1;"""
+    c_mysql = mysql(B_HOST, B_USER, B_PASSWORD, B_DATABASE)
+    if len(c_mysql.query(sql)) == 0:
+        pytest.skip(msg='没有匹配的订单')  # 跳过此用例
+    sale_order_id = (c_mysql.query(sql))[0][0]
+    return sale_order_id
+
+
+
 
 
 
@@ -287,4 +364,4 @@ def other_sale_id(sql_condition):
 
 
 if __name__ == '__main__':
-    pytest.main(['-v','test_order.py::Test_order::test_updateCheckingStatus'])
+    pytest.main(['-v','test_order.py::Test_order::test_updateTrackingData'])

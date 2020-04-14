@@ -5,3 +5,6 @@ author:zhouxuan
 2020/3/24 14:28
 @Desc:
 """
+import os
+os.system('pytest')
+

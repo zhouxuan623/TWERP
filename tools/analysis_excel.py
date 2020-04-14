@@ -55,17 +55,17 @@ for  i in range(1,worksheet.nrows):
     "内部培训"
     ##内部培训分为业务培训和技能培训 暂时设定大于1满分=1一半其他0
     BusinessTraining =int(worksheet.cell(i,5).value)   #内部业务培训
-    if BusinessTraining>1:
+    if BusinessTraining>=1:
         BusinessTraing_param=1
-    elif BusinessTraining ==1:
-        BusinessTraing_param = 0.5
+    # elif BusinessTraining ==1:
+    #     BusinessTraing_param = 0.5
     else:
         BusinessTraing_param =0
     TechnicalTraining =int(worksheet.cell(i,6).value)   #内部技术培训
-    if TechnicalTraining>1:
+    if TechnicalTraining>=1:
         TechnicalTraining_param=1
-    elif BusinessTraining ==1:
-        TechnicalTraining_param = 0.5
+    # elif BusinessTraining ==1:
+    #     TechnicalTraining_param = 0.5
     else:
         TechnicalTraining_param =0
     info['business_training']=BusinessTraing_param
@@ -86,6 +86,25 @@ for  i in range(1,worksheet.nrows):
     "产品月销售额 填写百分比系数"
     Sale_param = worksheet.cell(i,9).value
     info['product_sale'] =  float(Sale_param)
+
+    "产品帮助文档  直接填写系数0,1 1满分"
+    Doc_help = worksheet.cell(i,10).value
+    info['product_doc']=Doc_help
+
+    "产品线工作安排与管理"
+    work_management = worksheet.cell(i,11).value
+    info['work_management'] = float(work_management)
+
+    "产品使用率"
+    usage_rate = worksheet.cell(i,12).value
+    info['usage_rate'] = float(usage_rate)
+
+    "已付费流失率"
+    lossing_customer = worksheet.cell(i,13).value
+    info['lossing_customer'] = float(lossing_customer)
+
+
+
     department = worksheet.cell(i,0).value
     if department=='ERP3.0':
         info['department']='新erp组'
@@ -103,7 +122,7 @@ connection = pymysql.connect(host='10.0.6.170',
                              port=3306,
                              user='root',
                              password='TOBO@123',
-                             db='django_test',
+                             db='django1',
                              charset='utf8')
 kpi_year=input("请输入考核年份")
 kpi_month=input('请输入考核月份')
@@ -112,7 +131,7 @@ cursor = connection.cursor()
 SQL="""
 SELECT demand_judge '需求评审通过率', product_train '产品发布及培训',research_and_analyst '产品市场的调查与研究',
 product_innovative '产品创新',business_training '内部业务培训',skill_training '内部技术培训'
-,promotion_publicity '产品推广与宣传',product_definition '产品计划明确性',product_sale '产品月销售额'
+,promotion_publicity '产品推广与宣传',product_definition '产品计划明确性',product_sale '产品月销售额',product_doc '产品帮助文档'
 from django1.devs_kpiinfos where kpi_year='2020' and kpi_month='2';"""
 for info in infos:
     demand_judge = info['demand_judge']
@@ -124,8 +143,12 @@ for info in infos:
     promotion_publicity= info['promotion_publicity']
     product_definition= info['product_definition']
     product_sale= info['product_sale']
+    product_doc = info['product_doc']
+    work_management = info['work_management']
+    usage_rate = info['usage_rate']
+    lossing_customer = info['lossing_customer']
     department = info['department']
-    SQL_UPDATE=f"""update django_test.devs_kpiinfos set
+    SQL_UPDATE=f"""update devs_kpiinfos set
     demand_judge='{demand_judge}' ,
     product_train = '{product_train}' ,
     research_and_analyst = '{research_and_analyst}'
@@ -134,9 +157,13 @@ for info in infos:
     , skill_training = '{skill_training}'
     , promotion_publicity ='{promotion_publicity}'
     , product_definition = '{product_definition}'
-    , product_sale = '{product_sale}'
+    , product_sale = '{product_sale}',product_doc='{product_doc}',
+    work_management = '{work_management}',
+    usage_rate = '{usage_rate}',
+    lossing_customer = '{lossing_customer}'
     where kpi_year='{kpi_year}' and kpi_month='{kpi_month}'
     and department='{department}';"""
+    print (SQL_UPDATE)
     cursor.execute(SQL_UPDATE)
 confirm_input = input(f"即将导入{kpi_year}年{kpi_month}的数据，输入'Y'确认，输入'N'取消")
 if confirm_input.upper()=='Y':

@@ -29,6 +29,10 @@ B_USER = 'ibizdata'
 B_PASSWORD='123456'
 B_DATABASE = 'twerp_db1'
 B_PORT = 3306
+WAREHOUSE_ID='384100822826352648'
+
+
+
 
 class mysql():
     def __init__(self,host,user,password,database,port=3306,charset='utf8'):
@@ -101,14 +105,18 @@ def check_result(url,headers,data=None):
 
 def response_result(url,headers,method='post',data=None):
     "简单结果校验"
+    if 'http://' not in url:
+        url=SYS_URL+url
     if method=='get':
         home_page=requests.get(url=url,headers=headers)
     elif method=='put':
         home_page = requests.put(url=url,headers=headers,data=json.dumps(data))
+    elif method=='delete':
+        home_page = requests.delete(url=url,headers=headers)
     else:
         home_page = requests.post(url=url,headers=headers, data=json.dumps(data))
     response = home_page.json()
-    assert response['code'] == 0, response['code']
+    assert response['code'] == 0, response
 
 
 

@@ -8,7 +8,11 @@ author:zhouxuan
 import  pytest
 import  requests
 import  os
-from .common import  mysql,SYS_URL
+# from .common import  mysql,SYS_URL
+from .common import *
+import json
+
+
 global token
 token=''
 def pytest_addoption(parser):
@@ -55,12 +59,41 @@ def get_token():
     return token
 
 
-@pytest.fixture(scope='session',autouse=True)
+@pytest.fixture(scope='session')
 def _headers(get_token):
     token = get_token
     header={'Accept': 'application/json',
             'Content-Type': 'application/json',
             'Authorization':f'{token}'}
-    return header
+    yield header
+
+
+@pytest.fixture(scope='function')
+def _supplier():
+    '获取供应商id'
+    sql = f"""SELECT supplier_id from {B_DATABASE}.tb1_supplier where merchant_id='{MERCHANT}' and is_delete=0 ORDER BY created_time DESC;"""
+    c_mysql = mysql(B_HOST, B_USER, B_PASSWORD, B_DATABASE)
+    if len(c_mysql.query(sql)) == 0:
+        pytest.skip(msg='没有可用的商品')  # 跳过此用例
+    supplier_id = (c_mysql.query(sql))[0][0]
+    return supplier_id
+
+
+
+
+
+@pytest.fixture(scope='module')
+def login(request):
+    user,psw = request.param
+    print("登录账户：%s" % user)
+    print("登录密码：%s" % psw)
+    if psw:
+        return True
+    else:
+        return False
+
+
+
+
 
 

@@ -7,7 +7,6 @@ author:zhouxuan
 """
 import pytest
 from API.common import *
-import json
 from faker import Factory
 fake = Factory.create()
 fake.pydecimal()

@@ -43,3 +43,12 @@ def _arriving():
     arriving_info = (c_mysql.query(sql))[0]
     return arriving_info
 
+@pytest.fixture(scope='function')
+def _stockingwarning():
+    sql = f"""SELECT a.stock_warning_id,a.supplier_id,a.warehouse_id from {B_DATABASE}.tb1_statistics_stock_warning a where 
+    a.merchant_id='{MERCHANT}' ORDER BY a.created_time DESC;"""
+    c_mysql = mysql(B_HOST, B_USER, B_PASSWORD, B_DATABASE)
+    if len(c_mysql.query(sql)) == 0:
+        pytest.skip(msg='没有可用的数据')  # 跳过此用例
+    stockingwarning_info= (c_mysql.query(sql))[0]
+    return stockingwarning_info

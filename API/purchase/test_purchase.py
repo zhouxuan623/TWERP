@@ -86,6 +86,58 @@ class Test_purchase():
             }
         response_result('/purchaseInfo/productArrived',_headers,'post',data)
 
+    def test_setting(self,_headers,_goods_id,_supplier):
+        '商品叫货设定 POST /purchaseInfo/setting'
+        data= [
+                    {
+                        "goodsId": _goods_id,
+                        "supplierList": [
+                            {
+                                "isPrimary": 0,
+                                "purchasingDays": 10,
+                                "supplierId": _supplier
+                            }
+                        ]
+                    }
+                ]
+        response_result('/purchaseInfo/setting',_headers,'post',data)
+
+    def test_setting_list(self,_headers):
+        '叫货清单列表查询 POST /purchaseInfo/setting/list'
+        data={"pageNum":1,"pageSize":10,"searchName":""}
+        response_result('/purchaseInfo/setting/list',_headers,'post',data)
+
+    def test_getSupplierProduct(self,_headers,_stockingwarning):
+        '根据厂商ID或叫货清单ID,生成预采购单 POST /purchaseInfo/stockwarning/getSupplierProduct'
+        stock_warning_id,supplier_id,warehouse_id = _stockingwarning
+        data={"supplierId":supplier_id,"searchName":"","stockWarningIds":[stock_warning_id],"warehosueId":warehouse_id}
+        response_result('/purchaseInfo/stockwarning/getSupplierProduct',_headers,data=data)
+
+    def test_stockwarning_list(self,_headers):
+        '叫货清单分页查询 POST /purchaseInfo/stockwarning/list'
+        data = {"pageNum":1,"pageSize":10,"searchName":"","supplierId":"","warehouseId":""}
+        response_result('/purchaseInfo/stockwarning/list',_headers,data=data)
+
+    def test_update(self,_headers,_purchase_id,_goods_id):
+        '修改采购单 PUT /purchaseInfo/update'
+        data={
+                  "purchaseDetailList": [
+                    {
+                      "goodsId": _goods_id,
+                      "quantity": 2
+                    }
+                  ],
+                  "purchaseId": _purchase_id(0)
+                }
+        response_result('/purchaseInfo/update',_headers,'put',data)
+
+
+
+
+
+
+
+
 
 
 
@@ -95,7 +147,7 @@ class Test_purchase():
 
 
 if __name__ == '__main__':
-    pytest.main(['-vs','test_purchase.py::Test_purchase::test_product_arrived'])
+    pytest.main(['-vs','test_purchase.py::Test_purchase::test_update'])
 
 
 

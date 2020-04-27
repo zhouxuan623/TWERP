@@ -34,6 +34,19 @@ def roleid_delete():
     role_id = (c_mysql.query(sql))[0]
     return role_id[0]
 
+@pytest.fixture(scope='function')
+def setting_code():
+    sql = f"""SELECT setting_code from {B_DATABASE}.tb1_merchant_settings a where a.merchant_id='{MERCHANT}' ORDER BY a.created_time desc;"""
+    c_mysql = mysql(B_HOST, B_USER, B_PASSWORD, B_DATABASE)
+    if len(c_mysql.query(sql)) == 0:
+        pytest.skip(msg='没有可用的信息')  # 跳过此用例
+
+    setting_codes = (c_mysql.query(sql))
+    results=[]
+    for i in setting_codes:
+        results.append(i[0])
+    return random.choice(results)  #随机返回一个setting_code
+
 
 
 

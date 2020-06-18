@@ -125,40 +125,60 @@ delay_infos = [['白尧', '2020/05/06', 6], ['白尧', '2020/05/13', 2], ['白�
                ['钟晓敏', '2020/05/09', '未打卡'], ['钟晓敏', '2020/05/12', 2], ['钟晓敏', '2020/05/15', 1],
                ['钟晓敏', '2020/05/18', 14], ['钟晓敏', '2020/05/19', 4], ['钟晓敏', '2020/05/29', 2], ['周玄', '2020/05/14', 10],
                ['朱玲', '2020/05/11', 1], ['朱玲', '2020/05/20', '未打卡']]
-names=[]
-vip_name=['夏浩波','方家威','施曼','李兴恩','李华',"郑迪岸"]
 
-for info in delay_infos:
-    if info[0] in vip_name:
-        pass
-    elif info[0] not in names:
-        names.append(info[0])
-"不用考核名单"
-for name in names:
-    delay_count=0
-    greater15_count=0
-    less15_count=0
-    less5_count=0
-    unchecking_count=0  #未打卡
-    times=0
+def clc_delay_times():
+    names=[]
+    vip_name=['夏浩波','方家威','施曼','李兴恩','李华',"郑迪岸"]
     for info in delay_infos:
-        if name==info[0]:
-            delay_time=info[2] #迟到时间
-            if type(delay_time)==int:
-                delay_count += 1  # 迟到次数+1
-                if delay_time>15:
-                    greater15_count+=1
-                    times+=delay_time
-
-                elif delay_time>5:
-                    less15_count+=1
-                else:
-                    less5_count+=1
+        if info[0] in vip_name:
+            pass
+        elif info[0] not in names:
+            names.append(info[0])
+    "不用考核名单"
+    for name in names:
+        delay_count=0
+        greater15_count=0
+        less15_count=0
+        less5_count=0
+        unchecking_count=0  #未打卡
+        times=0   #迟到累计时间
+        less15times=[]  #迟到小于15分钟时间
+        less5times=[]  #迟到小于5分钟时间
+        for info in delay_infos:
+            if name==info[0]:
+                delay_time = info[2]  # 迟到时间
+                if type(delay_time)==int:
+                    if delay_time>15:
+                        times+=delay_time  #大于15的直接扣钱，不计入累计迟到次数
+                    elif delay_time>5 and delay_time<=15:
+                        less15_count+=1
+                        delay_count+=1
+                        less15times.append(delay_time)
+                    else:
+                        less5_count+=1
+                        delay_count+=1
+                        less5times.append(delay_time)
+        less15times.sort(reverse=True)
+        less5times.sort(reverse=True)
+        if delay_count>5:
+            target_time=0  #累计迟到时间
+            if less15_count>3:
+                target_time=sum(less15times[3:])+sum(less5times[2:])
             else:
-                unchecking_count+=1
+                target_time=sum(less5times[6-less15_count:])  # 3+3-less15count 15分钟的不够，直接扣小于5的
+            times+=target_time
+        else:
+            times+=sum(less15times[3:])
+        if times>0:
+            print (name,times)
 
-    if delay_count>5 or greater15_count>1 or less15_count>3 or unchecking_count>0 :
-        print ("姓名:"+name,',迟到次数',delay_count,'超过15分钟',greater15_count,'次，共计,15分钟内',less15_count,'次，5分钟内',less5_count,'次。未打卡',unchecking_count,"次")
+
+
+
+
+
+
+
 
 
 

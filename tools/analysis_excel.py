@@ -21,7 +21,7 @@ for  i in range(1,worksheet.nrows):
     "需求评审通过率"
     demand_nums= worksheet.cell(i,1).value  #需求评审>=2满分=1一半分数 其他0分
     if demand_nums>1:
-        demand_judge = 1
+        demand_judge = 1202
     elif demand_nums ==1:
         demand_judge =0.5
     else:

@@ -10,7 +10,7 @@ import pymysql
 import sys
 import os
 
-filename = os.path.join(os.path.dirname(os.path.dirname(__file__)),'kqfiles',"demo.xlsx")
+filename = os.path.join(os.path.dirname(os.path.dirname(__file__)),'kqfiles',"kpi.xlsx")
 workbook = xlrd.open_workbook(filename)
 "先格式化excel"
 worksheet= workbook.sheets()[1]
@@ -164,7 +164,7 @@ for info in infos:
     , product_sale = '{product_sale}',product_doc='{product_doc}',
     work_management = '{work_management}',
     usage_rate = '{usage_rate}',
-    lossing_customer = '{lossing_customer}',and auto_test=1 and bug_param=1
+    lossing_customer = '{lossing_customer}', auto_test=1 , bug_param=1
     where kpi_year='{kpi_year}' and kpi_month='{kpi_month}'
     and department='{department}' ;"""
     print(SQL_UPDATE)

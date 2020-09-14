@@ -12,7 +12,8 @@ import sys
 excle_name=input("输入要解析的文件名")
 filename = os.path.join(os.path.dirname(os.path.dirname(__file__)),'kqfiles',excle_name)
 workbook = xlrd.open_workbook(filename)
-sheet0 = workbook.sheet_by_name("爱商")
+sheet_name = input("输入要解析的sheet名称")
+sheet0 = workbook.sheet_by_name(sheet_name)
 "循环读取数据 不考虑工作日和休息日，只需要有打卡，就记录为正常工时"
 "需要考勤的姓名信息汇总"
 devs={'IBIZ开发组':['白尧','黄春','曾小云'],

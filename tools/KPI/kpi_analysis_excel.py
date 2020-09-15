@@ -42,18 +42,24 @@ for i in range(1, worksheet.nrows):
         ProductLaunchTraining_param = 0.5
     info['product_train'] = ProductLaunchTraining_param
 
-    AnalysisCompetitiveProducts = int(worksheet.cell(i,4).value)  #竞品分析包含两个指标：1 产品市场的调查与研究：一个月两封分析邮件满分，一封得一半。\
+    AnalysisCompetitiveProducts = int(worksheet.cell(i, 4).value)  #竞品分析包含两个指标：1 产品市场的调查与研究：一个月两封分析邮件满分，一封得一半。\
     # 2、产品创新 有一封邮件就默认有创新建议，则满分
-    if AnalysisCompetitiveProducts >=2:
-        ProductMarketAnalysis = 1 #产品市场的调查与研究
-        ProductInnovate = 1 #产品创新
-    elif AnalysisCompetitiveProducts ==1:
-        ProductMarketAnalysis = 0.5
-        ProductInnovate =1
-    else:
-        ProductMarketAnalysis = ProductInnovate = 0
-    info['research_and_analyst'] = ProductMarketAnalysis
-    info['product_innovative'] = ProductInnovate
+    # if AnalysisCompetitiveProducts >=2:
+    #     ProductMarketAnalysis = 1 #产品市场的调查与研究
+    #     ProductInnovate = 1 #产品创新
+    # elif AnalysisCompetitiveProducts ==1:
+    #     ProductMarketAnalysis = 0.5
+    #     ProductInnovate =0.5
+    # else:
+    #     ProductMarketAnalysis = ProductInnovate = 0
+    info['research_and_analyst'] = AnalysisCompetitiveProducts  #竞品分析
+    # info['product_innovative'] = ProductInnovate
+
+    "产品创新"
+    ProductInnovate = int(worksheet.cell(i, 14).value)
+    info['product_innovative'] = ProductInnovate  #产品创新
+
+
 
     "内部培训"
     ##内部培训分为业务培训和技能培训 暂时设定大于1满分=1一半其他0

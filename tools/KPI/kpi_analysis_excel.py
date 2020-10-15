@@ -52,7 +52,15 @@ for i in range(1, worksheet.nrows):
     #     ProductInnovate =0.5
     # else:
     #     ProductMarketAnalysis = ProductInnovate = 0
-    info['research_and_analyst'] = AnalysisCompetitiveProducts  #竞品分析
+
+    #产品市场的调查与研究 一月两次满分，否则0.5
+    if AnalysisCompetitiveProducts >=2:
+        ProductMarketAnalysis = 1 #产品市场的调查与研究
+    elif AnalysisCompetitiveProducts ==1:
+        ProductMarketAnalysis = 0.5
+    else:
+        ProductMarketAnalysis = 0
+    info['research_and_analyst'] = ProductMarketAnalysis  #竞品分析
     # info['product_innovative'] = ProductInnovate
 
     "产品创新"
